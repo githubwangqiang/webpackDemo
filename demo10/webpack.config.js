@@ -6,7 +6,10 @@ const webpack = require('webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
     entry: {
-        app: './src/index.js'
+        vendor: [
+            'lodash'
+        ],
+        main: './src/index.js'
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -14,8 +17,8 @@ module.exports = {
         hot: true
     },
     output: {
-        filename: '[name].[hash:5].js',
-        chunkFilename: '[name].[chunkhash:5].js',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[name].[chunkhash].js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/'
     },
@@ -39,12 +42,20 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            title: 'webpack',
+            title: 'Caching',
             template: './index.html'
         }),
         new ExtractTextPlugin("[name].[hash:5].css"),
         new webpack.NamedModulesPlugin(),
+        new webpack.HashedModuleIdsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            filename: 'manifest.[hash].js'
+        })
     ]
 }
