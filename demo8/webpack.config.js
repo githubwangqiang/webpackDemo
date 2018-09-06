@@ -42,7 +42,7 @@ module.exports = {
             title: 'webpack',
             template: './index.html'
         }),
-        new ExtractTextPlugin("[name].[hash:5].css"),
+        new ExtractTextPlugin("[name].[contenthash:5].css"),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new BundleAnalyzerPlugin()
